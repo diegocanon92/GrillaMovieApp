@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Movies View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="GrillaMovieApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="MoviesViewController" customModule="GrillaMovieApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -42,6 +42,9 @@
                                                 <buttonConfiguration key="configuration" style="plain">
                                                     <backgroundConfiguration key="background" image="magnifyingglass.circle.fill" catalog="system"/>
                                                 </buttonConfiguration>
+                                                <connections>
+                                                    <action selector="searchMovies:" destination="BYZ-38-t0r" eventType="touchUpInside" id="h0s-22-h7v"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <constraints>
@@ -60,24 +63,39 @@
                                             <segment title="FANTASY"/>
                                             <segment title="HORROR"/>
                                         </segments>
+                                        <connections>
+                                            <action selector="categorySelectedAction:" destination="BYZ-38-t0r" eventType="valueChanged" id="AFu-OU-fEp"/>
+                                        </connections>
                                     </segmentedControl>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Hbk-ID-t4J">
                                         <rect key="frame" x="0.0" y="126" width="353" height="613"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="iRV-7Q-RZ2">
-                                            <size key="itemSize" width="128" height="128"/>
+                                            <size key="itemSize" width="147" height="213"/>
                                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                         <cells>
                                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="MzQ-vz-BSG">
-                                                <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="147" height="213"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="QxX-cw-H4x">
-                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="147" height="213"/>
                                                     <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="GOT" translatesAutoresizingMaskIntoConstraints="NO" id="HCT-ee-Bqq">
+                                                            <rect key="frame" x="0.0" y="0.0" width="147" height="213"/>
+                                                        </imageView>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="HCT-ee-Bqq" secondAttribute="trailing" id="TGK-yj-qrr"/>
+                                                        <constraint firstItem="HCT-ee-Bqq" firstAttribute="leading" secondItem="QxX-cw-H4x" secondAttribute="leading" id="dnZ-6i-gtk"/>
+                                                        <constraint firstItem="HCT-ee-Bqq" firstAttribute="top" secondItem="QxX-cw-H4x" secondAttribute="top" id="eOU-fS-G55"/>
+                                                        <constraint firstAttribute="bottom" secondItem="HCT-ee-Bqq" secondAttribute="bottom" id="kXM-tk-hxV"/>
+                                                    </constraints>
                                                 </collectionViewCellContentView>
+                                                <size key="customSize" width="147" height="213"/>
                                             </collectionViewCell>
                                         </cells>
                                     </collectionView>
@@ -93,16 +111,90 @@
                             <constraint firstItem="0TB-ni-kyW" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="gsl-K7-sb4"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="categoryMovies" destination="jBu-BO-SNF" id="c7X-fx-ObB"/>
+                        <outlet property="moviesCollection" destination="Hbk-ID-t4J" id="e5F-Ku-JIk"/>
+                        <outlet property="nameMoviesLabel" destination="jCf-IL-seL" id="Yhe-EZ-ZPb"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="90.839694656488547" y="3.5211267605633805"/>
         </scene>
+        <!--Search Movie View Controller-->
+        <scene sceneID="kKD-w1-TvF">
+            <objects>
+                <viewController id="1MD-bk-SQB" customClass="SearchMovieViewController" customModule="GrillaMovieApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="XMd-he-ZSn">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="425"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="70L-qO-U7E">
+                                <rect key="frame" x="20" y="69" width="353" height="346"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Buscar Peliculas" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NFe-30-qzb">
+                                        <rect key="frame" x="0.0" y="0.0" width="353" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="DKu-To-syI"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Escribe Una Categoria" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ife-t1-2u0">
+                                        <rect key="frame" x="0.0" y="65" width="353" height="45"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="45" id="AQV-31-3yY"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" returnKeyType="search"/>
+                                    </textField>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Cinema" translatesAutoresizingMaskIntoConstraints="NO" id="bnl-D2-Wh9">
+                                        <rect key="frame" x="0.0" y="125" width="353" height="166"/>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5bR-pe-H05">
+                                        <rect key="frame" x="0.0" y="306" width="353" height="40"/>
+                                        <color key="backgroundColor" red="0.033974315970000002" green="0.21704509850000001" blue="0.36544680600000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="gQH-37-mYE"/>
+                                        </constraints>
+                                        <color key="tintColor" systemColor="secondarySystemBackgroundColor"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="BUSCAR"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <integer key="value" value="20"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="yER-fc-PBU"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="70L-qO-U7E" secondAttribute="trailing" constant="20" id="PEb-tZ-rKh"/>
+                            <constraint firstItem="70L-qO-U7E" firstAttribute="top" secondItem="yER-fc-PBU" secondAttribute="top" constant="10" id="in6-mr-4ii"/>
+                            <constraint firstItem="70L-qO-U7E" firstAttribute="leading" secondItem="yER-fc-PBU" secondAttribute="leading" constant="20" id="z0r-ds-cBU"/>
+                            <constraint firstAttribute="bottom" secondItem="70L-qO-U7E" secondAttribute="bottom" constant="10" id="zwZ-Ck-au9"/>
+                        </constraints>
+                    </view>
+                    <size key="freeformSize" width="393" height="425"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="V3W-eg-ZaP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="797.70992366412213" y="155.98591549295776"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="Cinema" width="483" height="258"/>
+        <image name="GOT" width="3840" height="2160"/>
         <image name="magnifyingglass.circle.fill" catalog="system" width="128" height="123"/>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="secondarySystemBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
