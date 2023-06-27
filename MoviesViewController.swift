@@ -24,7 +24,6 @@ class MoviesViewController: UIViewController {
         
         moviesCollection.delegate = self
         moviesCollection.dataSource = self
-        manager.delegate = self
         
         //segmented control
         getMovies(category: "Mario")
@@ -43,8 +42,16 @@ class MoviesViewController: UIViewController {
     }
     func getMovies(category: String){
         Task {
-            await manager.findMovie(topic: category)
+            do{
+                let response = await try manager.findMovie(topic: category)
+                 print(response)
+            }catch{
+                print(error)
+            }
+           
         }
+        
+      
     }
     @IBAction func searchMovies(_ sender: UIButton) {
     }
@@ -52,22 +59,6 @@ class MoviesViewController: UIViewController {
     }
 }
 
-extension MoviesViewController: MoviesManagerDelegate {
-    func showMovies(listOfMovies: [Result]) {
-        self.movies = listOfMovies
-        
-        DispatchQueue.main.async {
-            self.moviesCollection.reloadData()
-            //Ocultar loader
-        }
-    }
-    
-    func showError(error: String) {
-        print("Error: \(error)")
-    }
-    
-    
-}
 
 extension MoviesViewController: UICollectionViewDelegate, UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -76,11 +67,13 @@ extension MoviesViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieCell", for: indexPath) as! MovieCell
+        
         //Modificar la imagen
-        if let urlImage = URL(string: movies[indexPath.row].posterPath) {
-            cell.movieImage.kf.setImage(with: urlImage)
-            cell.movieImage.layer.cornerRadius = 25
-        }
+        
+   //     if let urlImage = URL(string: movies[indexPath.row].title) {
+   //         cell.movieImage.kf.setImage(with: urlImage)
+   //         cell.movieImage.layer.cornerRadius = 25
+   //     }
         return cell
     }
 }

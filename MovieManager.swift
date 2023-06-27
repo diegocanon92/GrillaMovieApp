@@ -7,20 +7,25 @@
 
 import Foundation
 
-protocol MoviesManagerDelegate{
-    func showMovies(listOfMovies: [Result])
-    func showError(error: String)
-}
+//protocol MoviesManagerDelegate{
+    //func showMovies(listOfMovies: [Result])
+    //func showError(error: String)
+//}
 
+enum MovieError: Error {
+    case badUrl
+    case badResponse
+}
 struct MovieManager{
     
-    var delegate: MoviesManagerDelegate?
+    //var delegate: MoviesManagerDelegate?
     
-    func findMovie(topic: String)async {
+    func findMovie(topic: String)async throws -> ResponseBodyModel {
         do{
-            guard let url = URL(string: "https://api.themoviedb.org/3/search/movie?include_adult=false&language=en-US&page=1")else{
+            guard let url = URL(string: "https://api.themoviedb.org/3//movie?query=Mario&include_adult=false&language=en-US&page=1")else{
                 print("Error al crear url")
-                return}
+                throw MovieError.badUrl
+            }
             
             print("URL: \(url)")
             
@@ -30,18 +35,28 @@ struct MovieManager{
             let (data, response) = try await URLSession.shared.data(for: urlRequest)
             
             guard (response as? HTTPURLResponse)?.statusCode == 200 else{
-                fatalError("Error fetching data")
+                throw MovieError.badResponse
+                
                 //Delegado.mostrarError
             }
             
             let decoder = JSONDecoder()
             let decodedData = try decoder.decode(ResponseBodyModel.self, from: data)
             
-            let listOfMovies = decodedData.results
-            delegate?.showMovies(listOfMovies: listOfMovies)
+            var json = try JSONSerialization.jsonObject(with: data)
+            
+            print(json)
+            
+            //let listOfMovies = decodedData.results
+            //delegate?.showMovies(listOfMovies: listOfMovies)
+            
+            print("result: \(decodedData.results)")
+            
+            return decodedData
             
         }catch{
             print("debug: error \(error.localizedDescription)")
+            throw error
         }
     }
 }
