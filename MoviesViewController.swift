@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Kingfisher
+
 
 class MoviesViewController: UIViewController {
     
@@ -37,21 +37,18 @@ class MoviesViewController: UIViewController {
         if let flowLayout = moviesCollection.collectionViewLayout as?
             UICollectionViewFlowLayout{
             flowLayout.scrollDirection = .horizontal
-            
         }
     }
     func getMovies(category: String){
         Task {
             do{
-                let response = await try manager.findMovie(topic: category)
-                 print(response)
+                let response = try await manager.findMovie(topic: category)
+                movies = response.results
+                moviesCollection.reloadData()
             }catch{
                 print(error)
             }
-           
         }
-        
-      
     }
     @IBAction func searchMovies(_ sender: UIButton) {
     }
@@ -70,10 +67,11 @@ extension MoviesViewController: UICollectionViewDelegate, UICollectionViewDataSo
         
         //Modificar la imagen
         
-   //     if let urlImage = URL(string: movies[indexPath.row].title) {
-   //         cell.movieImage.kf.setImage(with: urlImage)
-   //         cell.movieImage.layer.cornerRadius = 25
-   //     }
+        if let urlImage =  movies[indexPath.row].poster_path {
+            cell.setImageUrl(urlImage)
+            cell.movieImage.image = UIImage(named: urlImage)
+            cell.movieImage.layer.cornerRadius = 25
+        }
         return cell
     }
 }
