@@ -18,11 +18,9 @@ enum MovieError: Error {
 }
 struct MovieManager{
     
-    //var delegate: MoviesManagerDelegate?
-    
     func findMovie(topic: String)async throws -> ResponseBodyModel {
         do{
-            guard let url = URL(string: "https://api.themoviedb.org/3//movie?query=Mario&include_adult=false&language=en-US&page=1")else{
+            guard let url = URL(string: "https://api.themoviedb.org/3/search/movie?query=Mario&include_adult=false&language=en-US&page=1")else{
                 print("Error al crear url")
                 throw MovieError.badUrl
             }
@@ -43,7 +41,7 @@ struct MovieManager{
             let decoder = JSONDecoder()
             let decodedData = try decoder.decode(ResponseBodyModel.self, from: data)
             
-            var json = try JSONSerialization.jsonObject(with: data)
+            let json = try JSONSerialization.jsonObject(with: data)
             
             print(json)
             
