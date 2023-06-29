@@ -16,5 +16,5 @@ struct ResponseBodyModel: Codable {
 // MARK: - Result
 struct Result: Codable {
     let original_title: String
-    let poster_path: String
+    let poster_path: String?
 }
